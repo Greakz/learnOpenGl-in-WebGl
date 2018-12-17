@@ -1,5 +1,3 @@
-// Jut for error preventing
-import { WebGL2RenderingContext } from './WebGL2RenderingContext';
 // Actual File
 import { Log } from './Log';
 
@@ -45,6 +43,7 @@ export abstract class Canvas {
                  renderFunc: (context: WebGL2RenderingContext) => void,) {
         canvas_loop_update_func = updateFunc;
         canvas_loop_render_func = renderFunc;
+        loop();
     }
 }
 
@@ -76,7 +75,7 @@ function loop() {
 }
 
 function initDom() {
-    const content: string = '<div id="container"><canvas id="canvas" /></div><div id="overlay"></div>';
+    const content: string = '<div id="container"><canvas id="canvas" /></div><div id="fps"></div><div id="overlay"></div>';
     const root: HTMLElement | null = document.getElementById('root');
     if (root === null) {
         Log.error('Canvas', 'Cant find root node!');
