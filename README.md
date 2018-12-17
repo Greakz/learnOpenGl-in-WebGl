@@ -13,7 +13,7 @@ To check out the lessons you need to clone this repository, navigate into any le
 
 ## "Base Stack"
 
-To use WebGl we will need a Canvas, therefore i will allways use the same index.html and Canvas.ts file in every Lesson!
+To use WebGl we will need a Canvas, therefore i will allways use these index.html, Canvas.ts and ShaderLoader.ts file in every Lesson!
 
 ```index.html```:
 ```html
@@ -58,6 +58,27 @@ export abstract class Canvas {
     static start(updateFunc: (time: number) => void,
                  renderFunc: (context: WebGl2RenderingContext) => void,) {
         // start the Application by calling start and supply the core functions of the application
+    }
+}
+  ``` 
+  ```ShaderLoader.ts```:
+  ```Typescript
+
+export abstract class ShaderLoader {
+    static buildShader(id: string): WebGLProgram {
+        // Loads a Shader and gives back the compiled Program
+        /*
+            This requires a specific layout in the shaders:
+            
+            //#VERTEX-SHADER#//
+            #version...
+            //#FRAGMENT-SHADER#//
+            #versiono...
+            
+            So both shaders, vertex and fragment get defined in the same file.
+            To make them parsable, we need to mark the start of a shader
+            with the //#WHICH-SHADER#// line!
+         */
     }
 }
   ```
