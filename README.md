@@ -63,7 +63,7 @@ export abstract class Canvas {
 }
   ```
 
-For debugging purposes, i created a custom LogClass
+For debugging purposes, i created a custom LogClass \
   ```Log.ts```:
   ```Typescript
 export abstract class Log {
