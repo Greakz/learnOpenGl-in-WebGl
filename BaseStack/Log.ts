@@ -20,6 +20,10 @@ export abstract class Log {
         show_logs_on_income = val;
     }
 
+    static clear() {
+        console.clear();
+    }
+
     static info(comp: string, message: any) {
         push({
             type: 'INFO',

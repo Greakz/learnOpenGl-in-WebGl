@@ -6,6 +6,7 @@ var canvas_instance: HTMLCanvasElement;
 var canvas_context: WebGL2RenderingContext;
 var canvas_fps: number;
 var canvas_interval: number;
+var canvas_initialised: boolean;
 
 var canvas_lastTime: number = (new Date()).getTime();
 var canvas_measuredFps = 0;
@@ -31,7 +32,11 @@ export abstract class Canvas {
         window.addEventListener('resize', () => adjustCanvasSize());
         adjustCanvasSize();
         // Mouse.init();
-        Log.info('Canvas', 'Initialised Successfully...')
+        Log.info('Canvas', 'Initialised Successfully...');
+        canvas_initialised = true;
+        if(canvas_loop_update_func !== undefined && canvas_loop_render_func !== undefined) {
+            loop();
+        }
     }
 
     static setNewFps(newFps: number) {
@@ -43,7 +48,9 @@ export abstract class Canvas {
                  renderFunc: (context: WebGL2RenderingContext) => void,) {
         canvas_loop_update_func = updateFunc;
         canvas_loop_render_func = renderFunc;
-        loop();
+        if(canvas_initialised) {
+            loop();
+        }
     }
 }
 

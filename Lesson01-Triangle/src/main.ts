@@ -11,6 +11,7 @@ import { Log } from './BaseStack/Log';
 document.addEventListener('DOMContentLoaded', () => {
 
     Log.show_logs(true);
+    Log.clear();
 
     Canvas.init();
     Canvas.setNewFps(60);
