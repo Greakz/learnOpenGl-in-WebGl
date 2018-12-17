@@ -12,6 +12,8 @@ export class Shader {
 
     public uniform_locations: {
         color: WebGLUniformLocation
+        texture: WebGLUniformLocation
+        texture2: WebGLUniformLocation
     };
 
     create() {
@@ -22,7 +24,9 @@ export class Shader {
             texture_coordinate: GL.getAttribLocation(this.program, 'TextureCoordinate')
         };
         this.uniform_locations = {
-            color: GL.getUniformLocation(this.program, 'color')
+            color: GL.getUniformLocation(this.program, 'color'),
+            texture: GL.getUniformLocation(this.program, 'SomeTexture'),
+            texture2: GL.getUniformLocation(this.program, 'SomeTexture2')
         };
     }
 

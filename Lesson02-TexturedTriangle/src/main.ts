@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     Canvas.start(
         (time: number) => Log.info('MAIN', 'RUNNING UPDATE LOOP'),
         (GL: WebGL2RenderingContext) => {
+            GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
             triangle.draw(shader);
             triangle2.draw(shader);
         }

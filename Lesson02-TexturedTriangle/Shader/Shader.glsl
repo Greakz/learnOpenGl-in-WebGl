@@ -20,9 +20,11 @@ precision mediump float;
 in vec4 vColor;
 in vec2 vTextureCoordinate;
 
+uniform sampler2D SomeTexture;
+uniform sampler2D SomeTexture2;
+
 out vec4 fragmentColor;
 
 void main(void) {
-    vTextureCoordinate;
-    fragmentColor = vColor;
+    fragmentColor = vColor * (texture(SomeTexture, vTextureCoordinate) + texture(SomeTexture2, vTextureCoordinate));
 }
