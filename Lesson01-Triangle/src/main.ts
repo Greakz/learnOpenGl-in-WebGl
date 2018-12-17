@@ -9,6 +9,7 @@ import { Canvas } from './BaseStack/Canvas';
 import { Log } from './BaseStack/Log';
 import { Shader } from './Shader';
 import { Triangle } from './Triangle';
+import { TriangleIndexed } from './TriangleIndexed';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -23,10 +24,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const triangle: Triangle = new Triangle();
     triangle.initBuffer();
 
+    const triangle2: TriangleIndexed = new TriangleIndexed();
+    triangle2.initBuffer();
+
     Canvas.start(
         (time: number) => Log.info('MAIN', 'RUNNING UPDATE LOOP'),
         (GL: WebGL2RenderingContext) => {
-            triangle.draw(shader)
+            triangle.draw(shader);
+            triangle2.draw(shader);
         }
     );
 });
