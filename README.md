@@ -66,7 +66,6 @@ export abstract class Canvas {
 For debugging purposes, i created a custom LogClass
   ```Log.ts```:
   ```Typescript
-// Public methods
 export abstract class Log {
 
     static show_logs(val: boolean) {
