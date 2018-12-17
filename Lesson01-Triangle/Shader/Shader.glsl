@@ -1,15 +1,14 @@
 //#VERTEX-SHADER#//
 #version 300 es
-in vec3 vertexPosition;
-out vec4 vColor;
+in vec3 VertexPosition;
 
-uniform mat4 modelMatrix;
-uniform mat4 projectionMatrix;
 uniform vec4 color;
+
+out vec4 vColor;
 
 
 void main(void) {
-    gl_Position = projectionMatrix * modelMatrix * vec4(vertexPosition, 1.0);
+    gl_Position = vec4(VertexPosition, 1.0);
     vColor = color;
 }
 //#FRAGMENT-SHADER#//
