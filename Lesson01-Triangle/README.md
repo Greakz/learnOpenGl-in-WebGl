@@ -1,6 +1,6 @@
 # Lesson 01 - Triangles
 
-So, the tutorials on [LearnOpenGL.com](learnopengl.com) starting with creating an OpenGl Context and open up the first window.
+So, the tutorials on [LearnOpenGL.com - Hello Triangle](https://learnopengl.com/Getting-started/Hello-Triangle) starting with creating an OpenGl Context and open up the first window.
 This is simply done in HTML / Javascript by adding any Canvas Element to your (as allways structured) HTML and call the following
 lines in Javascript:
 ```javascript

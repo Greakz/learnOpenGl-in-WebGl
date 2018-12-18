@@ -1,3 +1,4 @@
 # Lesson 02 - Textured Triangles
 
-Heres an example of how to use Textures in WebGl2
+related Tutorials:
+[LearnOpenGL.com - Textures](https://learnopengl.com/Getting-started/Textures)
