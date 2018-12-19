@@ -36,7 +36,7 @@ export class Material {
         this.specular_image = new Image();
         this.specular_image.onload = () => {
             GL.bindTexture(GL.TEXTURE_2D, this.specular);
-            GL.texImage2D(GL.TEXTURE_2D, 0, GL.RED, 500, 500, 0, GL.RED, GL.UNSIGNED_BYTE, this.specular_image);
+            GL.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, 500, 500, 0, GL.RGBA, GL.UNSIGNED_BYTE, this.specular_image);
             GL.generateMipmap(GL.TEXTURE_2D);
             // base settings, make it editable with textureoptions
             GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP_TO_EDGE);
