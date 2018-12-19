@@ -1,4 +1,4 @@
-# Lesson 04 - Phong Lightning and Material
+# 04 - Phong Lightning and Material
 
 related Tutorials: \
 [LearnOpenGL.com - Basic Lightning (Phong)](https://learnopengl.com/Lighting/Basic-Lighting) \
