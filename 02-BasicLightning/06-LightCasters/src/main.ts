@@ -14,6 +14,7 @@ import { Vec3 } from './Math/Vector/vec';
 import { vec3ToF32 } from './Math/Vector/vecToF32';
 import { DirectionalLight } from './DirectionalLight';
 import { PointLight } from './PointLight';
+import { SpotLight } from './SpotLight';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -46,10 +47,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const directionalLight: DirectionalLight = new DirectionalLight();
 
+
     const pointLight: PointLight = new PointLight();
     const pointLightCube: Cube = new Cube();
     pointLightCube.initBuffer();
     pointLightCube.transformation.scale(0.1).moveX(pointLight.position.x).moveY(pointLight.position.y).moveZ(pointLight.position.z);
+
+    const spotLight: SpotLight = new SpotLight();
+    const spotLightCube: Cube = new Cube();
+    spotLightCube.initBuffer();
+    spotLightCube.transformation.scale(0.1).moveX(spotLight.position.x).moveY(spotLight.position.y).moveZ(spotLight.position.z);
 
     Canvas.start(
         (time: number) => {
@@ -71,12 +78,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             pointLight.bind(shader);
 
+            spotLight.bind(shader);
+
             GL.uniform3fv(shader.uniform_locations.camera_position, vec3ToF32(camera.getPosition()));
 
             pointLightCube.draw(shader, camera);
+            spotLightCube.draw(shader, camera);
+
             cube.draw(shader, camera);
             cube2.draw(shader, camera);
             cube3.draw(shader, camera);
+
             cube4.draw(shader, camera);
         }
     );

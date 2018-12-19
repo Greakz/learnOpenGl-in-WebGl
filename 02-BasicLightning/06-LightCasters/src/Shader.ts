@@ -35,6 +35,14 @@ export class Shader {
         point_specular: WebGLUniformLocation;
         point_con_lin_quad: WebGLUniformLocation;
 
+        spot_color: WebGLUniformLocation;
+        spot_position: WebGLUniformLocation;
+        spot_direction: WebGLUniformLocation;
+        spot_ambient: WebGLUniformLocation;
+        spot_diffuse: WebGLUniformLocation;
+        spot_specular: WebGLUniformLocation;
+        spot_cutoff: WebGLUniformLocation;
+
         camera_position: WebGLUniformLocation;
     };
 
@@ -69,6 +77,14 @@ export class Shader {
             point_diffuse: GL.getUniformLocation(this.program, 'point_diffuse'),
             point_specular: GL.getUniformLocation(this.program, 'point_specular'),
             point_con_lin_quad: GL.getUniformLocation(this.program, 'point_con_lin_quad'),
+
+            spot_color: GL.getUniformLocation(this.program, 'spot_color'),
+            spot_position: GL.getUniformLocation(this.program, 'spot_position'),
+            spot_direction: GL.getUniformLocation(this.program, 'spot_position'),
+            spot_ambient: GL.getUniformLocation(this.program, 'spot_ambient'),
+            spot_diffuse: GL.getUniformLocation(this.program, 'spot_diffuse'),
+            spot_specular: GL.getUniformLocation(this.program, 'spot_specular'),
+            spot_cutoff: GL.getUniformLocation(this.program, 'spot_cutoff'),
 
             camera_position: GL.getUniformLocation(this.program, 'camera_position')
         };

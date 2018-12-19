@@ -9,7 +9,7 @@ export class Camera {
     protected projection_matrix: Mat4;
     protected view_matrix: Mat4;
 
-    protected position: Vec3 = {x: 0.0, y: 1.5, z: -5.0};
+    protected position: Vec3 = {x: 0.0, y: 3.5, z: -5.0};
     protected target: Vec3 = {x: 0.0, y: 0.0, z: 0.0};
     protected up: Vec3 = {x: 0, y: 1, z: 0};
 
@@ -32,7 +32,7 @@ export class Camera {
 
     update(time: number) {
 
-        const position: number = (time * 0.0001) % (2 * Math.PI);
+        const position: number = (time * 0.0003) % (2 * Math.PI);
 
         this.position = {
             x: Math.sin(position) * 6,
