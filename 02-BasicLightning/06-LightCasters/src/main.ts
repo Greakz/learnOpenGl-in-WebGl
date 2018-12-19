@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cube2: Cube = new Cube();
     const cube3: Cube = new Cube();
     const cube4: Cube = new Cube();
-    const cube4_size: number = 8;
+    const cube4_size: number = 5;
     cube.initBuffer();
     cube2.initBuffer();
     cube3.initBuffer();
