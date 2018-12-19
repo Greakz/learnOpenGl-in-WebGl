@@ -1,4 +1,4 @@
-# 05 - LightMaps
+# LightMaps
 
 related Tutorials: \
 [LearnOpenGL.com - Material (LightSpec)](https://learnopengl.com/Lighting/Materials) \

@@ -1,4 +1,4 @@
-# 03 - Transformation And Camera
+# Transformation And Camera
 
 related Tutorials: \
 [LearnOpenGL.com - Transformations](https://learnopengl.com/Getting-started/Transformations) \
