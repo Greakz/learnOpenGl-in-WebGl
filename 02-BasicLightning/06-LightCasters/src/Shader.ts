@@ -80,7 +80,7 @@ export class Shader {
 
             spot_color: GL.getUniformLocation(this.program, 'spot_color'),
             spot_position: GL.getUniformLocation(this.program, 'spot_position'),
-            spot_direction: GL.getUniformLocation(this.program, 'spot_position'),
+            spot_direction: GL.getUniformLocation(this.program, 'spot_direction'),
             spot_ambient: GL.getUniformLocation(this.program, 'spot_ambient'),
             spot_diffuse: GL.getUniformLocation(this.program, 'spot_diffuse'),
             spot_specular: GL.getUniformLocation(this.program, 'spot_specular'),

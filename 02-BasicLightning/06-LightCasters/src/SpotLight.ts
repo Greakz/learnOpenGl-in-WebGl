@@ -7,8 +7,8 @@ import { radians } from './Math/radians';
 export class SpotLight {
 
     color: Vec3 = {x: 1.0, y: 1.0, z: 1.0};
-    position: Vec3 = {x: 1.5, y: 1, z: 0};
-    direction: Vec3 = {x: 0, y: -1, z: 0};
+    position: Vec3 = {x: 2.5, y: 1.5, z: 0};
+    direction: Vec3 = {x: -0.25, y: -1, z: 0};
     ambient: Vec3 = {x: 0.3, y: 0.3, z: 0.3};
     diffuse: Vec3 = {x: 0.9, y: 0.9, z: 0.9};
     specular: Vec3 = {x: 0.5, y: 0.5, z: 0.5};

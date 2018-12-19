@@ -106,16 +106,16 @@ void main(void) {
     vec3 spot_spec_light_res = vec3(0.0);
     if(theta > spot_cutoff.y) {
         float epsilon   = spot_cutoff.x - spot_cutoff.y;
-        float intensity = 1.0; //clamp((theta - spot_cutoff.y) / epsilon, 0.0, 1.0);
+        float intensity = clamp((theta - spot_cutoff.y) / epsilon, 0.0, 1.0);
 
         // amb could also be calced
-        spot_diff_light_res = vec3(intensity); // * calculateDiffuseLight(surface_normal_unit, current_mat_diffuse, spot_light_dir_unit, spot_color, spot_diffuse);
-        spot_spec_light_res = vec3(intensity); // * calculateSpecularLight(surface_normal_unit, current_mat_specular, view_direction, spot_light_dir_unit, spot_color, spot_specular);
+        spot_diff_light_res = vec3(intensity) * calculateDiffuseLight(surface_normal_unit, current_mat_diffuse, spot_light_dir_unit, spot_color, spot_diffuse);
+        spot_spec_light_res = vec3(intensity) * calculateSpecularLight(surface_normal_unit, current_mat_specular, view_direction, spot_light_dir_unit, spot_color, spot_specular);
     }
 
 
-    vec3 diff_light_result =/* dir_diff_light_res + point_diff_light_res + */spot_diff_light_res;
-    vec3 spec_light_result = /*dir_spec_light_res + point_spec_light_res + */spot_spec_light_res;
+    vec3 diff_light_result = dir_diff_light_res + point_diff_light_res + spot_diff_light_res;
+    vec3 spec_light_result = dir_spec_light_res + point_spec_light_res + spot_spec_light_res;
 
-    fragmentColor = vec4(, 1.0); //vec4(ambient_light_result + diff_light_result + spec_light_result, 1.0);
+    fragmentColor = vec4(ambient_light_result + diff_light_result + spec_light_result, 1.0);
 }
