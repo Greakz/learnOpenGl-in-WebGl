@@ -28,7 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const cube: Cube = new Cube();
     cube.initBuffer();
 
-    const lightPos: Vec3 = {x: 0.8, y: 0.75, z:0.8};
+    const lightPos: Vec3 = {x: 0.8, y: 0.75, z: 0.8};
+    const lightAmb: Vec3 = {x: 0.4, y: 0.4, z: 0.4};
+    const lightDiff: Vec3 = {x: 0.45, y: 0.45, z: 0.45};
+    const lightSpec: Vec3 = {x: 0.9, y: 0.9, z: 0.9};
+
     const cube_at_light: Cube = new Cube();
     cube_at_light.initBuffer();
     cube_at_light.transformation.scale(0.2).moveX(lightPos.x).moveY(lightPos.y).moveZ(lightPos.z);
@@ -45,6 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             GL.useProgram(shader.program);
             GL.uniform3fv(shader.uniform_locations.light_position, vec3ToF32(lightPos));
+            GL.uniform3fv(shader.uniform_locations.light_ambient, vec3ToF32(lightAmb));
+            GL.uniform3fv(shader.uniform_locations.light_diffuse, vec3ToF32(lightDiff));
+            GL.uniform3fv(shader.uniform_locations.light_specular, vec3ToF32(lightSpec));
             GL.uniform3fv(shader.uniform_locations.camera_position, vec3ToF32(camera.getPosition()));
 
             cube.draw(shader, camera);

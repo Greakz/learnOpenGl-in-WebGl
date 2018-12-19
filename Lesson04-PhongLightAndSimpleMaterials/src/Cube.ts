@@ -68,7 +68,7 @@ export class Cube {
 
     private c: number = 0;
     update(time: number) {
-        this.transformation.rotateX(2.5);
+        this.transformation.rotateY(2.5);
         this.c++;
         if(this.c > 100) {
             this.material = getRandomMaterial();
