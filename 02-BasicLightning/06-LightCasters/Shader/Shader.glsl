@@ -54,7 +54,7 @@ uniform vec3 spot_direction;
 uniform vec3 spot_ambient;
 uniform vec3 spot_diffuse;
 uniform vec3 spot_specular;
-//uniform vec3 spot_con_lin_quad; // if with attenuation
+uniform vec3 spot_con_lin_quad; // if with attenuation
 uniform vec2 spot_cutoff; // use x as inner, y as outer cutoff value!
 
 uniform vec3 camera_position;
@@ -92,8 +92,8 @@ void main(void) {
 
     // point light
     vec3 point_light_dir_unit = normalize(point_position - vSurfacePosition);
-    float distance    = length(point_position - vSurfacePosition);
-    float attenuation = 1.0 / (point_con_lin_quad.x + point_con_lin_quad.y * distance + point_con_lin_quad.z * (distance * distance));
+    float point_distance    = length(point_position - vSurfacePosition);
+    float attenuation = 1.0 / (point_con_lin_quad.x + point_con_lin_quad.y * point_distance + point_con_lin_quad.z * (point_distance * point_distance));
     // amb could also be calced
     vec3 point_diff_light_res = calculateDiffuseLight(surface_normal_unit, current_mat_diffuse, point_light_dir_unit, point_color, point_diffuse) * vec3(attenuation);
     vec3 point_spec_light_res = calculateSpecularLight(surface_normal_unit,current_mat_specular, view_direction, point_light_dir_unit, point_color, point_specular) * vec3(attenuation);
@@ -104,13 +104,15 @@ void main(void) {
     float theta = dot(spot_light_dir_unit, normalize(-spot_direction)); // Theta = winkel zum fragementhit vom spotinneren
     vec3 spot_diff_light_res = vec3(0.0);
     vec3 spot_spec_light_res = vec3(0.0);
-    if(theta > spot_cutoff.y) {
+   if(theta > spot_cutoff.y) {
         float epsilon   = spot_cutoff.x - spot_cutoff.y;
         float intensity = clamp((theta - spot_cutoff.y) / epsilon, 0.0, 1.0);
+        float spot_distance    = length(spot_position - vSurfacePosition);
+        float attenuation = 1.0 / (spot_con_lin_quad.x + spot_con_lin_quad.y * spot_distance + spot_con_lin_quad.z * (spot_distance * spot_distance));
 
         // amb could also be calced
-        spot_diff_light_res = vec3(intensity) * calculateDiffuseLight(surface_normal_unit, current_mat_diffuse, spot_light_dir_unit, spot_color, spot_diffuse);
-        spot_spec_light_res = vec3(intensity) * calculateSpecularLight(surface_normal_unit, current_mat_specular, view_direction, spot_light_dir_unit, spot_color, spot_specular);
+        spot_diff_light_res = vec3(intensity * attenuation) * calculateDiffuseLight(surface_normal_unit, current_mat_diffuse, spot_light_dir_unit, spot_color, spot_diffuse);
+        spot_spec_light_res = vec3(intensity * attenuation) * calculateSpecularLight(surface_normal_unit, current_mat_specular, view_direction, spot_light_dir_unit, spot_color, spot_specular);
     }
 
 

@@ -7,13 +7,13 @@ export class PointLight {
 
     color: Vec3 = {x: 1.0, y: 1.0, z: 1.0};
     position: Vec3 = {x: -0.7, y: 0.7, z: -0.2};
-    ambient: Vec3 = {x: 0.3, y: 0.3, z: 0.3};
+    ambient: Vec3 = {x: 0.15, y: 0.15, z: 0.15};
     diffuse: Vec3 = {x: 0.9, y: 0.9, z: 0.9};
     specular: Vec3 = {x: 0.5, y: 0.5, z: 0.5};
 
     constant: number = 1;
-    linear: number = 1;
-    quadric: number = 3;
+    linear: number = 0.35;
+    quadric: number = 0.44;
 
 
     bind(shader: Shader) {
