@@ -1,6 +1,5 @@
-# Lesson 03 - Transformation And Camera
+# Lesson 05 - LightMaps
 
 related Tutorials: \
-[LearnOpenGL.com - Transformations](https://learnopengl.com/Getting-started/Transformations) \
-[LearnOpenGL.com - Coordinate-System](https://learnopengl.com/Getting-started/Coordinate-Systems) \
-[LearnOpenGL.com - Camera](https://learnopengl.com/Getting-started/Camera)
+[LearnOpenGL.com - Material (LightSpec)](https://learnopengl.com/Lighting/Materials) \
+[LearnOpenGL.com - LightningMaps](https://learnopengl.com/Lighting/Lighting-maps)

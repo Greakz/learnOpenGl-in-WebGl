@@ -1,6 +1,5 @@
-# Lesson 03 - Transformation And Camera
+# Lesson 04 - Phong Lightning and Material
 
 related Tutorials: \
-[LearnOpenGL.com - Transformations](https://learnopengl.com/Getting-started/Transformations) \
-[LearnOpenGL.com - Coordinate-System](https://learnopengl.com/Getting-started/Coordinate-Systems) \
-[LearnOpenGL.com - Camera](https://learnopengl.com/Getting-started/Camera)
+[LearnOpenGL.com - Basic Lightning (Phong)](https://learnopengl.com/Lighting/Basic-Lighting) \
+[LearnOpenGL.com - Material](https://learnopengl.com/Lighting/Materials)
