@@ -38,7 +38,7 @@ export abstract class Canvas {
         initDom();
         Canvas.setNewFps(60);
         canvas_instance = (document.querySelector('#canvas') as HTMLCanvasElement);
-        canvas_context = canvas_instance.getContext('webgl2') as WebGL2RenderingContext;
+        canvas_context = canvas_instance.getContext('webgl2', {stencil: true}) as WebGL2RenderingContext;
         window.addEventListener('resize', () => adjustCanvasSize());
         adjustCanvasSize();
         registerMoveHandler();
