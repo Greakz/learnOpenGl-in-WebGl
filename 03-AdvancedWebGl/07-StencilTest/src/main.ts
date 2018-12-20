@@ -15,6 +15,7 @@ import { PointLight } from './PointLight';
 import { SpotLight } from './SpotLight';
 import { Vec3 } from './BaseStack/Math/Vector/vec';
 import { vec3ToF32 } from './BaseStack/Math/Vector/vecToF32';
+import { SingleColorShader } from './SingleColorShader';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -27,6 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const shader: Shader = new Shader();
     shader.create();
+    const singleColorShader: SingleColorShader = new SingleColorShader();
+    singleColorShader.create();
 
     const cube: Cube = new Cube();
     const cube2: Cube = new Cube();
@@ -55,17 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
     spotLightCube.initBuffer();
     spotLightCube.transformation.scale(0.1).moveX(spotLight.position.x).moveY(spotLight.position.y).moveZ(spotLight.position.z);
 
-    const rayHitCube1: Cube = new Cube();
-    rayHitCube1.initBuffer();
-    rayHitCube1.transformation.scale(0.2);
-    const rayHitCube2: Cube = new Cube();
-    rayHitCube2.initBuffer();
-    rayHitCube2.transformation.scale(0.2);
-    const rayHitCube3: Cube = new Cube();
-    rayHitCube3.initBuffer();
-    rayHitCube3.transformation.scale(0.2);
-
-
+    var cube1_hovered: boolean = false;
+    var cube2_hovered: boolean = false;
+    var cube3_hovered: boolean = false;
 
     Canvas.start(
         (time: number) => {
@@ -77,42 +72,22 @@ document.addEventListener('DOMContentLoaded', () => {
             cube2.transformation.rotateZ(-0.7);
             cube3.transformation.rotateY(-1.9);
 
-            let res1 = cube.checkRayHit(screenRay, camera.getPosition());
-            let res2 = cube2.checkRayHit(screenRay, camera.getPosition());
-            let res3 = cube3.checkRayHit(screenRay, camera.getPosition());
-
-            if(res1 !== null) {
-                rayHitCube1.transformation.setTranslation({x: res1.x, y: res1.y, z: res1.z});
-            } else {
-                rayHitCube1.transformation.setTranslation({x: 0, y: -5, z: 0});
-            }
-
-            if(res2 !== null) {
-                rayHitCube2.transformation.setTranslation({x: res2.x, y: res2.y, z: res2.z});
-            } else {
-                rayHitCube2.transformation.setTranslation({x: 0, y: -5, z: 0});
-            }
-
-            if(res3 !== null) {
-                rayHitCube3.transformation.setTranslation({x: res3.x, y: res3.y, z: res3.z});
-            } else {
-                rayHitCube3.transformation.setTranslation({x: 0, y: -5, z: 0});
-            }
+            cube1_hovered = (cube.checkRayHit(screenRay, camera.getPosition()) !== null);
+            cube2_hovered = (cube2.checkRayHit(screenRay, camera.getPosition()) !== null);
+            cube3_hovered = (cube3.checkRayHit(screenRay, camera.getPosition()) !== null);
 
         },
         (GL: WebGL2RenderingContext) => {
-            GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
-            GL.enable(GL.DEPTH_TEST);
+            GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT | GL.STENCIL_BUFFER_BIT);
             GL.clearColor(0.2, 0.2, 0.2, 1.0);
+            GL.colorMask(true, true, true, true);
+            GL.enable(GL.DEPTH_TEST);
 
             GL.useProgram(shader.program);
 
             directionalLight.bind(shader);
-
             pointLight.bind(shader);
-
             spotLight.bind(shader);
-
             GL.uniform3fv(shader.uniform_locations.camera_position, vec3ToF32(camera.getPosition()));
 
             pointLightCube.draw(shader, camera);
@@ -122,11 +97,63 @@ document.addEventListener('DOMContentLoaded', () => {
             cube2.draw(shader, camera);
             cube3.draw(shader, camera);
 
-            rayHitCube1.draw(shader, camera);
-            rayHitCube2.draw(shader, camera);
-            rayHitCube3.draw(shader, camera);
-
             cube4.draw(shader, camera);
+
+
+
+            // STENCIL_PREPERATIONS
+            // Replacing the values at the stencil buffer to 1 on every pixel we draw
+            GL.enable(GL.STENCIL_TEST);
+            GL.stencilOp(GL.REPLACE, GL.REPLACE, GL.REPLACE);
+            GL.stencilFunc(GL.ALWAYS, 1, 0xFF);
+            // GL.stencilMask(0xFF);
+            // GL.stencilOp(GL.KEEP, GL.KEEP, GL.REPLACE);
+            GL.colorMask(false, false, false, false);
+
+            if(cube1_hovered) {
+                cube.draw(shader, camera);
+            }
+            if(cube2_hovered) {
+                cube2.draw(shader, camera);
+            }
+            if(cube3_hovered) {
+                cube3.draw(shader, camera);
+            }
+
+            // Second pass: Draw slightly increased versions
+            GL.stencilFunc(GL.NOTEQUAL, 1, 0xFF);
+            GL.stencilOp(GL.KEEP, GL.KEEP, GL.KEEP);
+            // GL.stencilMask(0x00);
+            // GL.stencilOp(GL.KEEP, GL.KEEP, GL.KEEP);
+            GL.disable(GL.DEPTH_TEST);
+
+            let originalScaling1 = cube.transformation.getScaling();
+            let originalScaling2 = cube2.transformation.getScaling();
+            let originalScaling3 = cube3.transformation.getScaling();
+            cube.transformation.scale(1.05);
+            cube2.transformation.scale(1.05);
+            cube3.transformation.scale(1.05);
+            GL.colorMask(true, true, true, true);
+
+            if(cube1_hovered) {
+                cube.drawSingleColor(singleColorShader, camera);
+            }
+            if(cube2_hovered) {
+                cube2.drawSingleColor(singleColorShader, camera);
+            }
+            if(cube3_hovered) {
+                cube3.drawSingleColor(singleColorShader, camera);
+            }
+
+            cube.transformation.setScaling(originalScaling1);
+            cube2.transformation.setScaling(originalScaling2);
+            cube3.transformation.setScaling(originalScaling3);
+
+
+            // DRAW ACTUAL SCENE
+
+
+
         }
     );
 });

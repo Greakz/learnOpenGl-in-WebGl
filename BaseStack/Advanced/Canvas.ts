@@ -24,6 +24,9 @@ var canvas_mouse_y: number = 0;
 var canvas_mouse_left: boolean = false;
 var canvas_mouse_right: boolean = false;
 
+var canvas_height: number = 0;
+var canvas_width: number = 0;
+
 // Public methods
 export abstract class Canvas {
 
@@ -67,6 +70,14 @@ export abstract class Canvas {
 
     static getMouseY(): number {
         return canvas_mouse_y;
+    }
+
+    static getScreenHeight(): number {
+        return canvas_height;
+    }
+
+    static getScreenWidth(): number {
+        return canvas_width;
     }
 
     static getMouseLeft(): boolean {
@@ -160,11 +171,11 @@ function registerMoveHandler() {
 }
 
 function adjustCanvasSize() {
-    const newHeight = document.getElementById('container').clientHeight;
-    const newWidth = document.getElementById('container').clientWidth;
-    canvas_instance.height = newHeight;
-    (canvas_instance as any).width = newWidth;
-    canvas_context.viewport(0, 0, newWidth, newHeight);
+    canvas_height = document.getElementById('container').clientHeight;
+    canvas_width = document.getElementById('container').clientWidth;
+    canvas_instance.height = canvas_height;
+    (canvas_instance as any).width = canvas_width;
+    canvas_context.viewport(0, 0, canvas_width, canvas_height);
 }
 
 function displayFps() {

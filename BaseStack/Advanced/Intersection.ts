@@ -5,6 +5,7 @@ import { mat4ToFlat } from './Math/Matrix/matTo';
 import { compareVec3AGreaterB } from './Math/Vector/compare';
 import { subtractVec3 } from './Math/Vector/subtract';
 import { Ray } from './Math/Ray/Ray';
+import { multiplyMat4Vec3 } from '../../03-AdvancedWebGl/06a-RayIntersectionWithMouse/src/BaseStack/Math/Vector/multiply';
 
 export abstract class Intersection {
     static check(ray: Ray, modelMatrix: Mat4, camPos: Vec3, vertex_array_polygon: number[]): null | Vec3 {
@@ -15,7 +16,7 @@ export abstract class Intersection {
 
         let inverse_model_matrix: number[] = invert(mat4ToFlat(modelMatrix));
         let ray_pos = multiplyInverseModelMatWithRay(inverse_model_matrix ,[ray.position.x, ray.position.y, ray.position.z]);
-        let ray_dir = multiplyInverseModelMatWithRay(inverse_model_matrix ,[ray.direction.x, ray.direction.y, ray.direction.z]);
+        let ray_dir = multiplyInverseModelMatWithRay(inverse_model_matrix ,[ray.direction.x, ray.direction.y, ray.direction.z], false);
 
         for (let i = 0; i < vertex_array_polygon.length; i += 9) {
             let triangle: number[][] = [
@@ -25,9 +26,9 @@ export abstract class Intersection {
             ];
             let partial_result = intersectTriangle(ray_pos, ray_dir, triangle);
             if(partial_result !== null) {
-                let part_res: Vec3 = {x: partial_result[0], y: partial_result[1], z: partial_result[2]};
+                let part_res: Vec3 = multiplyMat4Vec3(modelMatrix,{x: partial_result[0], y: partial_result[1], z: partial_result[2]});
                 if(result === null || compareVec3AGreaterB(subtractVec3(result, camPos), subtractVec3(part_res, camPos))) {
-                    result = partial_result;
+                    result = part_res;
                 }
             }
         }
@@ -83,10 +84,13 @@ function invert(input) {
     return inverted_mat;
 }
 
-function multiplyInverseModelMatWithRay(matrix: number[], ray: number[]): number[] {
+function multiplyInverseModelMatWithRay(matrix: number[], ray: number[], withTransForm: boolean = true): number[] {
 
 
     let x = ray[0], y = ray[1], z = ray[2], w = 1.0;
+    if(!withTransForm) {
+        w = 0.0;
+    }
     let c1r1 = matrix[0], c2r1 = matrix[1], c3r1 = matrix[2], c4r1 = matrix[3],
         c1r2 = matrix[4], c2r2 = matrix[5], c3r2 = matrix[6], c4r2 = matrix[7],
         c1r3 = matrix[8], c2r3 = matrix[9], c3r3 = matrix[10], c4r3 = matrix[11],
