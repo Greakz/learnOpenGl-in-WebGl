@@ -35,6 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const cube: Cube = new Cube();
     cube.initBuffer();
+    cube.transformation.moveX(-1.25);
+
+    const cube2: Cube = new Cube();
+    cube2.initBuffer();
+    cube2.transformation.moveX(1.25);
 
     const lightPos: Vec3 = {x: 0.8, y: 0.75, z:0.8};
     const cube_at_light: Cube = new Cube();
@@ -45,6 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
         (time: number) => {
             camera.update(time);
             cube.update(time);
+            cube2.update(time);
+            cube.transformation.rotateZ(0.5);
+            cube2.transformation.rotateX(0.3);
         },
         (GL: WebGL2RenderingContext) => {
             GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
@@ -59,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             GL.uniform3fv(shader.uniform_locations.camera_position, vec3ToF32(camera.getPosition()));
 
             cube.draw(shader, camera);
+            cube2.draw(shader, camera);
             cube_at_light.draw(shader, camera);
 
             GL.useProgram(skybox_shader.program);

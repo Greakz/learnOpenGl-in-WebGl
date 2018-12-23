@@ -9,14 +9,16 @@ export class Material {
     diffuse: Vec3;
     specular: Vec3;
     shininess: number;
-    reflect: number;
+    reflection: number;
+    refraction: number;
 
-    constructor(ambient: Vec3, diffuse: Vec3, specular: Vec3, shininess: number, reflect: number = 0.7) {
+    constructor(ambient: Vec3, diffuse: Vec3, specular: Vec3, shininess: number, reflect: number = 0.7, refraction: number = 0.2) {
         this.ambient = ambient;
         this.diffuse = diffuse;
         this.specular = specular;
         this.shininess = shininess;
-        this.reflect = reflect;
+        this.reflection = reflect;
+        this.refraction = refraction;
     }
 
     bind(shader: Shader) {
@@ -25,7 +27,8 @@ export class Material {
         GL.uniform3fv(shader.uniform_locations.mat_diffuse, vec3ToF32(this.diffuse));
         GL.uniform3fv(shader.uniform_locations.mat_specular, vec3ToF32(this.specular));
         GL.uniform1f(shader.uniform_locations.mat_shininess, this.shininess);
-        GL.uniform1f(shader.uniform_locations.mat_reflect, this.reflect);
+        GL.uniform1f(shader.uniform_locations.mat_reflect, this.reflection);
+        GL.uniform1f(shader.uniform_locations.mat_refract, this.refraction);
     }
 
 }

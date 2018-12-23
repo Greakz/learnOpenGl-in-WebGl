@@ -26,12 +26,14 @@ uniform vec3 mat_ambient;
 uniform vec3 mat_diffuse;
 uniform vec3 mat_specular;
 uniform float mat_shininess;
+uniform float mat_reflect;
+uniform float mat_refract;
 
 uniform vec3 light_position;
 uniform vec3 camera_position;
 
 uniform samplerCube skybox;
-uniform float mat_reflect;
+
 
 const vec3 light_color = vec3(1.0);
 
@@ -42,6 +44,10 @@ void main(void) {
      vec3 cam_to_surface = normalize(vSurfacePosition - camera_position);
      vec3 skybox_reflect_dir = reflect(cam_to_surface, normalize(vSurfaceNormal));
      vec3 skybox_reflection_res = texture(skybox, skybox_reflect_dir).rgb * vec3(mat_reflect);
+
+     float ratio = 1.00 / 1.52; // Glass Refraction Strength
+     vec3 skybox_refract_dir = refract(cam_to_surface, normalize(vSurfaceNormal), ratio);
+     vec3 skybox_refraction_res = texture(skybox, skybox_refract_dir).rgb * vec3(mat_refract);
 
     // ambient light
     vec3 ambient_light_result = mat_ambient * light_color;
@@ -56,5 +62,5 @@ void main(void) {
     float spec_strenght = pow(max(dot(view_dir, reflect_dir), 0.0), mat_shininess);
     vec3 spec_light_result = mat_specular * vec3(spec_strenght) * light_color;
 
-    fragmentColor = vec4(ambient_light_result + diff_light_result + spec_light_result + skybox_reflection_res, 1.0);
+    fragmentColor = vec4(((ambient_light_result + diff_light_result + spec_light_result) + (skybox_reflection_res + skybox_refraction_res)) * vec3(0.5), 1.0);
 }

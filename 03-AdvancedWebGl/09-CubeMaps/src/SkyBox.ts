@@ -7,12 +7,12 @@ export class SkyBox {
 
     private texture: WebGLTexture;
     private files: string[] = [
-        "interstellar_lf.jpg",
-        "interstellar_rt.jpg",
-        "interstellar_up.jpg",
-        "interstellar_dn.jpg",
-        "interstellar_ft.jpg",
-        "interstellar_bk.jpg"
+        "right.jpg",
+        "left.jpg",
+        "top.jpg",
+        "bottom.jpg",
+        "front.jpg",
+        "back.jpg"
     ];
     private images: HTMLImageElement[];
 

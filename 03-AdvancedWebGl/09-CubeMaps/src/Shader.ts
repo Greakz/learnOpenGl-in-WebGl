@@ -19,6 +19,7 @@ export class Shader {
         mat_specular: WebGLUniformLocation;
         mat_shininess: WebGLUniformLocation;
         mat_reflect: WebGLUniformLocation;
+        mat_refract: WebGLUniformLocation;
         light_position: WebGLUniformLocation;
         camera_position: WebGLUniformLocation;
         skybox: WebGLUniformLocation;
@@ -40,6 +41,7 @@ export class Shader {
             mat_specular: GL.getUniformLocation(this.program, 'mat_specular'),
             mat_shininess: GL.getUniformLocation(this.program, 'mat_shininess'),
             mat_reflect: GL.getUniformLocation(this.program, 'mat_reflect'),
+            mat_refract: GL.getUniformLocation(this.program, 'mat_refract'),
             light_position: GL.getUniformLocation(this.program, 'light_position'),
             camera_position: GL.getUniformLocation(this.program, 'camera_position'),
             skybox: GL.getUniformLocation(this.program, 'skybox')
