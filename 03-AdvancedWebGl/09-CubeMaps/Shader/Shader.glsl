@@ -41,10 +41,12 @@ out vec4 fragmentColor;
 
 void main(void) {
 
+    //reflection
      vec3 cam_to_surface = normalize(vSurfacePosition - camera_position);
      vec3 skybox_reflect_dir = reflect(cam_to_surface, normalize(vSurfaceNormal));
      vec3 skybox_reflection_res = texture(skybox, skybox_reflect_dir).rgb * vec3(mat_reflect);
 
+    // refraction
      float ratio = 1.00 / 1.52; // Glass Refraction Strength
      vec3 skybox_refract_dir = refract(cam_to_surface, normalize(vSurfaceNormal), ratio);
      vec3 skybox_refraction_res = texture(skybox, skybox_refract_dir).rgb * vec3(mat_refract);
@@ -62,5 +64,6 @@ void main(void) {
     float spec_strenght = pow(max(dot(view_dir, reflect_dir), 0.0), mat_shininess);
     vec3 spec_light_result = mat_specular * vec3(spec_strenght) * light_color;
 
+    // combine result
     fragmentColor = vec4(((ambient_light_result + diff_light_result + spec_light_result) + (skybox_reflection_res + skybox_refraction_res)) * vec3(0.5), 1.0);
 }

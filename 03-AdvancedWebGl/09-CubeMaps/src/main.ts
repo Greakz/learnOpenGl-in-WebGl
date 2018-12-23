@@ -34,16 +34,16 @@ document.addEventListener('DOMContentLoaded', () => {
     skybox.init();
 
     const cube: Cube = new Cube();
-    cube.initBuffer();
+    cube.initBuffer(0);
     cube.transformation.moveX(-1.25);
 
     const cube2: Cube = new Cube();
-    cube2.initBuffer();
+    cube2.initBuffer(1);
     cube2.transformation.moveX(1.25);
 
-    const lightPos: Vec3 = {x: 0.8, y: 0.75, z:0.8};
+    const lightPos: Vec3 = {x: 0.5, y: 0.75, z:0.8};
     const cube_at_light: Cube = new Cube();
-    cube_at_light.initBuffer();
+    cube_at_light.initBuffer(2);
     cube_at_light.transformation.scale(0.2).moveX(lightPos.x).moveY(lightPos.y).moveZ(lightPos.z);
 
     Canvas.start(

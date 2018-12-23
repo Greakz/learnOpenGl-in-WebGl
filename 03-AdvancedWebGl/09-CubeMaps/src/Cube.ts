@@ -8,7 +8,7 @@ import { Material } from './Material';
 export class Cube {
 
     public transformation: Transformation = new Transformation();
-    public material: Material = getRandomMaterial();
+    public material: Material;
 
     // positioned left on screen
     private vertex_positions: number[] = [
@@ -58,7 +58,8 @@ export class Cube {
 
     private vertex_position_buffer: WebGLBuffer;
 
-    initBuffer() {
+    initBuffer(material: number) {
+        this.material = getRandomMaterial(material);
         const GL: WebGL2RenderingContext = Canvas.getGL();
         this.vertex_position_buffer = GL.createBuffer();
         GL.bindBuffer(GL.ARRAY_BUFFER, this.vertex_position_buffer);
@@ -66,13 +67,7 @@ export class Cube {
         GL.bindBuffer(GL.ARRAY_BUFFER, null);
     }
 
-    private c: number = 0;
     update(time: number) {
-        this.c++;
-        if(this.c > 250) {
-            this.material = getRandomMaterial();
-            this.c = 0;
-        }
     }
 
     draw(shader: Shader, camera: Camera) {
@@ -101,9 +96,8 @@ export class Cube {
     }
 }
 
-function getRandomMaterial(): Material {
+function getRandomMaterial(i: number): Material {
 
-    let i = Math.floor(Math.random() * 8);
     if(i === 0) {
         // Emerald
         return new Material(
@@ -111,77 +105,27 @@ function getRandomMaterial(): Material {
             {x: 0.07568, y: 0.61424, z: 0.07568},
             {x: 0.633, y: 0.727811, z: 0.633},
             0.6 * 128,
-            0.1,
-            0.6
+            0.9,
+            0.1
         )
     } else if (i === 1) {
-        // Pearl
+        // Glass
         return new Material(
-            {x: 0.25, y: 0.20725, z: 0.20725},
-            {x: 1, y: 0.829, z: 0.829},
-            {x: 0.296648, y: 0.296648, z: 0.296648},
+            {x: 0.0215, y: 0.1745, z: 0.0215},
+            {x: 0.42, y: 0.42, z: 0.65},
+            {x: 0.52, y: 0.48, z: 0.80},
             0.088 * 128,
             0.1,
-            0.6
+            0.9
         )
-    } else if (i === 2) {
-        // Bronze
+    } else {
+        // simple only ambient
         return new Material(
-            {x: 0.2125, y: 0.1275, z: 0.054},
-            {x: 0.714, y: 0.4284, z: 0.18144},
-            {x: 0.393548, y: 0.271906, z: 0.166721},
-            0.2 * 128,
-            0.7,
-            0.0
-        )
-    } else if (i === 3) {
-        // Gold
-        return new Material(
-            {x: 0.24725, y: 0.1995, z: 0.0745},
-            {x: 0.75164, y: 0.60648, z: 0.22648},
-            {x: 0.628281, y: 0.555802, z: 0.366065},
-            0.4 * 128,
-            0.7,
-            0.0
-        )
-    } else if (i === 4) {
-        // Cyan Plastic
-        return new Material(
-            {x: 0.0, y: 0.1, z: 0.06},
-            {x: 0.0, y: 0.50980392, z: 0.50980392},
-            {x: 0.50196078, y: 0.50196078, z: 0.50196078},
-            0.25 * 128,
-            0.35,
-            0.0
-        )
-    } else if (i === 5) {
-        // Red Plastic
-        return new Material(
-            {x: 0.0, y: 0.0, z: 0.00},
-            {x: 0.5, y: 0.0, z: 0.0},
-            {x: 0.7, y: 0.6, z: 0.6},
-            0.25 * 128,
-            0.35,
-            0.0
-        )
-    } else if (i === 6) {
-        // Green Rubber
-        return new Material(
-            {x: 0.0, y: 0.05, z: 0.00},
-            {x: 0.4, y: 0.5, z: 0.4},
-            {x: 0.04, y: 0.7, z: 0.04},
-            0.078125 * 128,
-            0.2,
-            0.0
-        )
-    } else if (i === 7) {
-        // Yellow Rubber
-        return new Material(
-            {x: 0.05, y: 0.05, z: 0.00},
-            {x: 0.5, y: 0.5, z: 0.4},
-            {x: 0.7, y: 0.7, z: 0.04},
-            0.078125 * 128,
-            0.2,
+            {x: 1, y: 1, z: 1},
+            {x: 0, y: 0, z: 0},
+            {x: 0, y: 0, z: 0},
+            0,
+            0.0,
             0.0
         )
     }

@@ -12,12 +12,12 @@ export class Material {
     reflection: number;
     refraction: number;
 
-    constructor(ambient: Vec3, diffuse: Vec3, specular: Vec3, shininess: number, reflect: number = 0.7, refraction: number = 0.2) {
+    constructor(ambient: Vec3, diffuse: Vec3, specular: Vec3, shininess: number, reflection: number = 0.7, refraction: number = 0.2) {
         this.ambient = ambient;
         this.diffuse = diffuse;
         this.specular = specular;
         this.shininess = shininess;
-        this.reflection = reflect;
+        this.reflection = reflection;
         this.refraction = refraction;
     }
 
