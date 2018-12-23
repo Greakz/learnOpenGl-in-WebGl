@@ -18,12 +18,14 @@ export class Shader {
         mat_diffuse: WebGLUniformLocation;
         mat_specular: WebGLUniformLocation;
         mat_shininess: WebGLUniformLocation;
+        mat_reflect: WebGLUniformLocation;
         light_position: WebGLUniformLocation;
         camera_position: WebGLUniformLocation;
+        skybox: WebGLUniformLocation;
     };
 
     create() {
-        this.program = ShaderLoader.buildShader('shader');
+        this.program = ShaderLoader.buildShader('Shader');
         const GL: WebGL2RenderingContext = Canvas.getGL();
         this.attribute_locations = {
             vertex_position: GL.getAttribLocation(this.program, 'VertexPosition'),
@@ -37,8 +39,10 @@ export class Shader {
             mat_diffuse: GL.getUniformLocation(this.program, 'mat_diffuse'),
             mat_specular: GL.getUniformLocation(this.program, 'mat_specular'),
             mat_shininess: GL.getUniformLocation(this.program, 'mat_shininess'),
+            mat_reflect: GL.getUniformLocation(this.program, 'mat_reflect'),
             light_position: GL.getUniformLocation(this.program, 'light_position'),
-            camera_position: GL.getUniformLocation(this.program, 'camera_position')
+            camera_position: GL.getUniformLocation(this.program, 'camera_position'),
+            skybox: GL.getUniformLocation(this.program, 'skybox')
         };
     }
 

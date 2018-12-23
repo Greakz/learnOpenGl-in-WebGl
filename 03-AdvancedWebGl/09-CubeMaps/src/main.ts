@@ -12,6 +12,9 @@ import { Cube } from './Cube';
 import { Camera } from './Camera';
 import { Vec3 } from './Math/Vector/vec';
 import { vec3ToF32 } from './Math/Vector/vecToF32';
+import {SkyBoxShader} from "./SkyBoxShader";
+import {mat4ToF32} from "./Math/Matrix/matTo";
+import {SkyBox} from "./SkyBox";
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -24,6 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const shader: Shader = new Shader();
     shader.create();
+    const skybox_shader: SkyBoxShader = new SkyBoxShader();
+    skybox_shader.create();
+
+    const skybox: SkyBox = new SkyBox();
+    skybox.init();
 
     const cube: Cube = new Cube();
     cube.initBuffer();
@@ -44,11 +52,19 @@ document.addEventListener('DOMContentLoaded', () => {
             GL.clearColor(0.2, 0.2, 0.2, 1.0);
 
             GL.useProgram(shader.program);
+
+            skybox.bindCubeMapTexture(shader.uniform_locations.skybox);
+
             GL.uniform3fv(shader.uniform_locations.light_position, vec3ToF32(lightPos));
             GL.uniform3fv(shader.uniform_locations.camera_position, vec3ToF32(camera.getPosition()));
 
             cube.draw(shader, camera);
             cube_at_light.draw(shader, camera);
+
+            GL.useProgram(skybox_shader.program);
+            GL.uniformMatrix4fv(skybox_shader.uniform_locations.view_matrix, false, mat4ToF32(camera.getViewMatrix()));
+            GL.uniformMatrix4fv(skybox_shader.uniform_locations.projection_matrix, false, mat4ToF32(camera.getProjectionMatrix()));
+            skybox.drawSkyBox(skybox_shader);
         }
     );
 });

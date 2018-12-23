@@ -1,5 +1,12 @@
-# Phong Lightning and Material
+# Cube Maps - Sky Box
 
 related Tutorials: \
-[LearnOpenGL.com - Basic Lightning (Phong)](https://learnopengl.com/Lighting/Basic-Lighting) \
-[LearnOpenGL.com - Material](https://learnopengl.com/Lighting/Materials)
+[LearnOpenGL.com - Cube Maps](https://learnopengl.com/Lighting/Basic-Lighting)
+
+
+---
+
+external Credits: \
+Skymap Author: \
+By Jockum Skoglund aka hipshot \
+www.zfight.com

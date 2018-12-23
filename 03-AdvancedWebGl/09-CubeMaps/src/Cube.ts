@@ -68,9 +68,9 @@ export class Cube {
 
     private c: number = 0;
     update(time: number) {
-        this.transformation.rotateX(1.5);
+        // this.transformation.rotateX(1.5);
         this.c++;
-        if(this.c > 1000) {
+        if(this.c > 250) {
             this.material = getRandomMaterial();
             this.c = 0;
         }
@@ -112,6 +112,7 @@ function getRandomMaterial(): Material {
             {x: 0.07568, y: 0.61424, z: 0.07568},
             {x: 0.633, y: 0.727811, z: 0.633},
             0.6 * 128,
+            0.7
         )
     } else if (i === 1) {
         // Pearl
@@ -120,6 +121,7 @@ function getRandomMaterial(): Material {
             {x: 1, y: 0.829, z: 0.829},
             {x: 0.296648, y: 0.296648, z: 0.296648},
             0.088 * 128,
+            0.6
         )
     } else if (i === 2) {
         // Bronze
@@ -128,6 +130,7 @@ function getRandomMaterial(): Material {
             {x: 0.714, y: 0.4284, z: 0.18144},
             {x: 0.393548, y: 0.271906, z: 0.166721},
             0.2 * 128,
+            0.7
         )
     } else if (i === 3) {
         // Gold
@@ -136,6 +139,7 @@ function getRandomMaterial(): Material {
             {x: 0.75164, y: 0.60648, z: 0.22648},
             {x: 0.628281, y: 0.555802, z: 0.366065},
             0.4 * 128,
+            0.7
         )
     } else if (i === 4) {
         // Cyan Plastic
@@ -144,6 +148,7 @@ function getRandomMaterial(): Material {
             {x: 0.0, y: 0.50980392, z: 0.50980392},
             {x: 0.50196078, y: 0.50196078, z: 0.50196078},
             0.25 * 128,
+            0.35
         )
     } else if (i === 5) {
         // Red Plastic
@@ -152,6 +157,7 @@ function getRandomMaterial(): Material {
             {x: 0.5, y: 0.0, z: 0.0},
             {x: 0.7, y: 0.6, z: 0.6},
             0.25 * 128,
+            0.35
         )
     } else if (i === 6) {
         // Green Rubber
@@ -160,6 +166,7 @@ function getRandomMaterial(): Material {
             {x: 0.4, y: 0.5, z: 0.4},
             {x: 0.04, y: 0.7, z: 0.04},
             0.078125 * 128,
+            0.2
         )
     } else if (i === 7) {
         // Yellow Rubber
@@ -168,6 +175,7 @@ function getRandomMaterial(): Material {
             {x: 0.5, y: 0.5, z: 0.4},
             {x: 0.7, y: 0.7, z: 0.04},
             0.078125 * 128,
+            0.2
         )
     }
 

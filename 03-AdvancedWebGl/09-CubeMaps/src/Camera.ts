@@ -32,12 +32,12 @@ export class Camera {
 
     update(time: number) {
 
-        const position: number = (time * 0.001) % (2 * Math.PI);
+        const position: number = (time * 0.0002) % (2 * Math.PI);
 
         this.position = {
-            x: Math.sin(position) * 6,
+            x: Math.sin(position) * 4,
             y: this.position.y,
-            z: Math.cos(position) * 6
+            z: Math.cos(position) * 4
         };
         this.updateViewMatrix();
     }
