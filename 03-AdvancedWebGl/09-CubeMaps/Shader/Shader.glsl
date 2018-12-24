@@ -41,6 +41,7 @@ out vec4 fragmentColor;
 
 void main(void) {
 
+
     //reflection
      vec3 cam_to_surface = normalize(vSurfacePosition - camera_position);
      vec3 skybox_reflect_dir = reflect(cam_to_surface, normalize(vSurfaceNormal));
@@ -53,15 +54,20 @@ void main(void) {
 
     // ambient light
     vec3 ambient_light_result = mat_ambient * light_color;
+
+    // Light Generals
+    vec3 view_dir = normalize(camera_position - vSurfacePosition);
+    vec3 light_dir = normalize(light_position - vSurfacePosition);
+    vec3 halfway_dir = normalize(light_dir + view_dir);
+
     // diffuse light
     vec3 surface_normal_unit = normalize(vSurfaceNormal);
-    vec3 light_dir = normalize(light_position - vSurfacePosition);
     float diff_strength = max(dot(surface_normal_unit, light_dir), 0.0);
     vec3 diff_light_result = vec3(diff_strength) * mat_diffuse * light_color;
     // specular light
-    vec3 view_dir = normalize(camera_position - vSurfacePosition);
-    vec3 reflect_dir = reflect(-light_dir, surface_normal_unit);
-    float spec_strenght = pow(max(dot(view_dir, reflect_dir), 0.0), mat_shininess);
+    // vec3 reflect_dir = reflect(-light_dir, surface_normal_unit);
+    float spec_strenght = pow(max(dot(view_dir, reflect_dir), 0.0), mat_shininess); // phong
+    float spec_strenght = pow(max(dot(surface_normal_unit, halfway_dir), 0.0), mat_shininess); // blinn
     vec3 spec_light_result = mat_specular * vec3(spec_strenght) * light_color;
 
     // combine result

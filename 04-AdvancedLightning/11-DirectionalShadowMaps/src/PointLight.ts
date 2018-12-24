@@ -5,7 +5,7 @@ import { vec3ToF32 } from './BaseStack/Math/Vector/vecToF32';
 
 export class PointLight {
 
-    color: Vec3 = {x: 1.0, y: 1.0, z: 1.0};
+    color: Vec3 = {x: 0.0, y: 0.0, z: 0.0};
     position: Vec3 = {x: -0.7, y: 0.7, z: -0.2};
     ambient: Vec3 = {x: 0.15, y: 0.15, z: 0.15};
     diffuse: Vec3 = {x: 0.9, y: 0.9, z: 0.9};

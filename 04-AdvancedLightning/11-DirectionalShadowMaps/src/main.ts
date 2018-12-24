@@ -5,35 +5,43 @@
     To Start the Application we simply call runStateManager() on the CanvasInstance
  */
 // wait for dom to get loaded!
-import { Canvas } from './BaseStack/Canvas';
-import { Log } from './BaseStack/Log';
-import { Shader } from './Shader';
-import { Cube } from './Cube';
-import { Camera } from './Camera';
-import { DirectionalLight } from './DirectionalLight';
-import { PointLight } from './PointLight';
-import { SpotLight } from './SpotLight';
-import { Vec3 } from './BaseStack/Math/Vector/vec';
-import { vec3ToF32 } from './BaseStack/Math/Vector/vecToF32';
+import {Canvas} from './BaseStack/Canvas';
+import {Log} from './BaseStack/Log';
+import {Shader} from './Shader';
+import {Cube} from './Cube';
+import {Camera} from './Camera';
+import {DirectionalLight} from './DirectionalLight';
+import {PointLight} from './PointLight';
+import {SpotLight} from './SpotLight';
+import {Vec3} from './BaseStack/Math/Vector/vec';
+import {vec3ToF32} from './BaseStack/Math/Vector/vecToF32';
+import {ShadowShader} from "./ShadowShader";
+import {DebugShader} from "./DebugShader";
+import {debug} from "util";
 
 document.addEventListener('DOMContentLoaded', () => {
-
-    Canvas.init();
-    Canvas.setNewFps(60);
     Log.show_logs(true);
     Log.clear();
+    Canvas.init();
+    Canvas.setNewFps(60);
+
 
     const camera: Camera = new Camera();
 
     const shader: Shader = new Shader();
     shader.create();
+    const shadowShader: ShadowShader = new ShadowShader();
+    shadowShader.create();
+    const debugShader: DebugShader = new DebugShader();
+    debugShader.create();
 
     const cube: Cube = new Cube();
     const cube2: Cube = new Cube();
     const cube3: Cube = new Cube();
     const cube4: Cube = new Cube();
-    const cube4_size: number = 5;
+    const cube4_size: number = 15;
     cube.initBuffer();
+    cube.transformation.moveY(-0.5);
     cube2.initBuffer();
     cube3.initBuffer();
     cube4.initBuffer();
@@ -44,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cube4.transformation.moveY(-((cube4_size / 2) + 1));
 
     const directionalLight: DirectionalLight = new DirectionalLight();
+    directionalLight.initShadowMap();
 
     const pointLight: PointLight = new PointLight();
     const pointLightCube: Cube = new Cube();
@@ -55,13 +64,38 @@ document.addEventListener('DOMContentLoaded', () => {
     spotLightCube.initBuffer();
     spotLightCube.transformation.scale(0.1).moveX(spotLight.position.x).moveY(spotLight.position.y).moveZ(spotLight.position.z);
 
+    const GL = Canvas.getGL();
+    const shadowMapFrameBuffer: WebGLFramebuffer = GL.createFramebuffer();
+
+    // Step 3: Create and initialize a texture buffer to hold the depth values.
+    // Note: the WEBGL_depth_texture extension is required for this to work
+    //       and for the GL.DEPTH_COMPONENT texture format to be supported.
+    const depth_renderbuffer = GL.createRenderbuffer();
+
+    GL.bindRenderbuffer(GL.RENDERBUFFER, depth_renderbuffer);
+    GL.renderbufferStorage(GL.RENDERBUFFER, GL.DEPTH_COMPONENT16, 1024, 1024);
+
+    // Step 4: Attach the specific buffers to the frame buffer.
+    GL.bindFramebuffer(GL.FRAMEBUFFER, shadowMapFrameBuffer);
+    GL.framebufferRenderbuffer(GL.FRAMEBUFFER, GL.DEPTH_ATTACHMENT, GL.RENDERBUFFER, depth_renderbuffer);
+
+    GL.bindTexture(GL.TEXTURE_2D, null);
+    // GL.bindRenderbuffer(GL.RENDERBUFFER, null);
+    GL.bindFramebuffer(GL.FRAMEBUFFER, null);
+
+    const status = GL.checkFramebufferStatus(GL.FRAMEBUFFER);
+    if (status !== GL.FRAMEBUFFER_COMPLETE) {
+        Log.error('MAIN', "The created frame buffer is invalid: " + status.toString());
+    }
+
+
     Canvas.start(
         (time: number) => {
             camera.update(time);
 
             const screenRay = camera.getRay();
 
-            cube.transformation.rotateX(-1);
+            // cube.transformation.rotateX(-1);
             cube2.transformation.rotateZ(-0.7);
             cube3.transformation.rotateY(-1.9);
 
@@ -71,8 +105,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
         },
         (GL: WebGL2RenderingContext) => {
-            GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
+
+
+            // DRAW SHADOW MAPS
+
+            GL.bindFramebuffer(GL.FRAMEBUFFER, shadowMapFrameBuffer);
             GL.enable(GL.DEPTH_TEST);
+            GL.depthFunc(GL.LESS);
+            GL.viewport(0, 0, 1024, 1024);
+            GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
+            // GL.cullFace(GL.FRONT);
+
+            directionalLight.prepareShadowRenderPass(shadowShader);
+
+            cube.drawLightSpace(shadowShader);
+            cube2.drawLightSpace(shadowShader);
+            cube3.drawLightSpace(shadowShader);
+            cube4.drawLightSpace(shadowShader);
+
+            GL.bindFramebuffer(GL.FRAMEBUFFER, null);
+            GL.cullFace(GL.BACK);
+            Canvas.viewportToScreen();
+
+            // DRAW SCENE
+
+            GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
             GL.clearColor(0.2, 0.2, 0.2, 1.0);
 
             GL.useProgram(shader.program);
@@ -93,6 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
             cube3.draw(shader, camera);
 
             cube4.draw(shader, camera);
+
         }
     );
+
 });

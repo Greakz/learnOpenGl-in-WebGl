@@ -26,6 +26,8 @@ export class Shader {
         dir_ambient: WebGLUniformLocation;
         dir_diffuse: WebGLUniformLocation;
         dir_specular: WebGLUniformLocation;
+        dir_light_space_matrix: WebGLUniformLocation;
+        dir_shadow_map: WebGLUniformLocation;
 
         point_color: WebGLUniformLocation;
         point_position: WebGLUniformLocation;
@@ -47,7 +49,7 @@ export class Shader {
     };
 
     create() {
-        this.program = ShaderLoader.buildShader('shader');
+        this.program = ShaderLoader.buildShader('Shader');
         const GL: WebGL2RenderingContext = Canvas.getGL();
         this.attribute_locations = {
             vertex_position: GL.getAttribLocation(this.program, 'VertexPosition'),
@@ -69,6 +71,8 @@ export class Shader {
             dir_ambient: GL.getUniformLocation(this.program, 'dir_ambient'),
             dir_diffuse: GL.getUniformLocation(this.program, 'dir_diffuse'),
             dir_specular: GL.getUniformLocation(this.program, 'dir_specular'),
+            dir_light_space_matrix: GL.getUniformLocation(this.program, 'dir_light_space_matrix'),
+            dir_shadow_map: GL.getUniformLocation(this.program, 'dir_shadow_map'),
 
             point_color: GL.getUniformLocation(this.program, 'point_color'),
             point_position: GL.getUniformLocation(this.program, 'point_position'),

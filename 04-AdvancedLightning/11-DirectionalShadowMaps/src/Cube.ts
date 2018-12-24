@@ -7,7 +7,7 @@ import { mat4ToF32 } from './BaseStack/Math/Matrix/matTo';
 import { Vec3 } from './BaseStack/Math/Vector/vec';
 import { Ray } from './BaseStack/Math/Ray/Ray';
 import { Intersection } from './BaseStack/Intersection';
-import { Log } from './BaseStack/Log';
+import {ShadowShader} from "./ShadowShader";
 
 export class Cube {
 
@@ -102,6 +102,20 @@ export class Cube {
         GL.drawArrays(GL.TRIANGLES, 0, 36);
     }
 
+    drawLightSpace(shadowShader: ShadowShader) {
+        const GL: WebGL2RenderingContext = Canvas.getGL();
+        GL.useProgram(shadowShader.program);
+        GL.bindBuffer(GL.ARRAY_BUFFER, this.vertex_position_buffer);
+        GL.vertexAttribPointer(shadowShader.attribute_locations.vertex_position, 3, GL.FLOAT, false, 8 * 4, 0);
+        GL.enableVertexAttribArray(shadowShader.attribute_locations.vertex_position);
+        GL.bindBuffer(GL.ARRAY_BUFFER, null);
+
+        const model_matrix: Float32Array = mat4ToF32(this.transformation.getMatrix());
+        GL.uniformMatrix4fv(shadowShader.uniform_locations.model_matrix, false, model_matrix);
+
+        GL.drawArrays(GL.TRIANGLES, 0, 36);
+    }
+
     private hitbox_vertices: number[] = [
         // Position
         -0.5, -0.5, 0.5,
@@ -157,7 +171,7 @@ export class Cube {
         if(result !== null) {
             this.material.add_color = {x: 0.1, y: 0.1, z: 0.0};
         } else {
-            this.material.add_color = {x: 0.0, y: 0.0, z: 0.5};
+            this.material.add_color = {x: 0.0, y: 0.0, z: 0.0};
         }
         return result;
     }

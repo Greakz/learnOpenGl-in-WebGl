@@ -7,16 +7,19 @@ in vec2 VertexTexCoord;
 uniform mat4 model_matrix;
 uniform mat4 view_matrix;
 uniform mat4 projection_matrix;
+uniform mat4 dir_light_space_matrix;
 
 out vec3 vSurfaceNormal;
 out vec3 vSurfacePosition;
 out vec2 vVertexTexCoord;
+out vec4 vFragPosLightSpace;
 
 void main(void) {
     gl_Position = projection_matrix * view_matrix * model_matrix * vec4(VertexPosition, 1.0);
     vSurfaceNormal = vec3(model_matrix * vec4(VertexNormal, 0.0));
     vSurfacePosition = vec3(model_matrix * vec4(VertexPosition, 1.0));
     vVertexTexCoord = VertexTexCoord;
+    vFragPosLightSpace = dir_light_space_matrix * vec4(vSurfacePosition, 1.0);
 }
 
 //#FRAGMENT-SHADER#//
@@ -25,6 +28,9 @@ precision mediump float;
 in vec3 vSurfaceNormal;
 in vec3 vSurfacePosition;
 in vec2 vVertexTexCoord;
+in vec4 vFragPosLightSpace;
+
+const float bias = 0.003;
 
 uniform sampler2D mat_diffuse;
 uniform sampler2D mat_specular;
@@ -37,6 +43,7 @@ uniform vec3 dir_direction;
 uniform vec3 dir_ambient;
 uniform vec3 dir_diffuse;
 uniform vec3 dir_specular;
+uniform sampler2D dir_shadow_map;
 
 //pointlight
 uniform vec3 point_color;
@@ -60,6 +67,33 @@ uniform vec3 camera_position;
 const vec3 light_color = vec3(1.0);
 
 out vec4 fragmentColor;
+
+float calculateDirectionalShadow() {
+    // perform perspective divide (only neccessary if using a projection matrix, what we are not doing in directional Shadow Mapping)
+    vec3 projCoords = vFragPosLightSpace.xyz / vFragPosLightSpace.w;
+       projCoords = projCoords * 0.5 + 0.5;
+    if(projCoords.z < 0.0 || projCoords.z > 1.0 || projCoords.x < 0.0 || projCoords.x > 1.0 || projCoords.y < 0.0 || projCoords.y > 1.0) {
+        return 1.0;
+    }
+
+    float shadow = 0.0;
+    vec2 texelSize = 1.0 / vec2(float(textureSize(dir_shadow_map, 0).x), float(textureSize(dir_shadow_map, 0).y));
+
+    float currentDepth = projCoords.z;
+    for(int x = -1; x <= 1; ++x)
+    {
+        for(int y = -1; y <= 1; ++y)
+        {
+            float pcfDepth = texture(dir_shadow_map, projCoords.xy + vec2(x, y) * texelSize).r;
+            float add = x == 0 && y == 0 ? 3.0 : 1.0;
+            shadow += currentDepth - bias > pcfDepth ? add : 0.0;
+        }
+    }
+    shadow /= 9.0;
+
+    //float closestDepth = texture(dir_shadow_map, projCoords.xy).r;
+    return 1.0 - shadow;
+}
 
 vec3 calculateDiffuseLight(vec3 surface_normal_unit, vec3 mat_diff, vec3 light_dir_unit, vec3 light_color, vec3 light_diffuse) {
     float diff_strength = max(dot(surface_normal_unit, light_dir_unit), 0.0);
@@ -114,10 +148,16 @@ void main(void) {
         spot_spec_light_res = vec3(intensity * attenuation) * calculateSpecularLight(surface_normal_unit, current_mat_specular, view_direction, spot_light_dir_unit, spot_color, spot_specular);
     }
 
+    /*
+        CHECK IF THE CURRENT FRAGMENT IS IN SHADOW
+    */
 
-    vec3 amb_light_result = dir_amb_light_res + point_amb_light_res + spot_amb_light_res;
-    vec3 diff_light_result = dir_diff_light_res + point_diff_light_res + spot_diff_light_res;
-    vec3 spec_light_result = dir_spec_light_res + point_spec_light_res + spot_spec_light_res;
+    float dir_shadow = calculateDirectionalShadow();
+
+    // Combine all results
+    vec3 amb_light_result = dir_amb_light_res/* + point_amb_light_res + spot_amb_light_res*/;
+    vec3 diff_light_result = (vec3(dir_shadow) * dir_diff_light_res)/* + point_diff_light_res + spot_diff_light_res*/;
+    vec3 spec_light_result = (vec3(dir_shadow) * dir_spec_light_res)/* + point_spec_light_res + spot_spec_light_res*/;
 
     vec3 light_result = amb_light_result + diff_light_result + spec_light_result;
     fragmentColor = vec4(

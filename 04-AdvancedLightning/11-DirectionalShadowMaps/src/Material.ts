@@ -5,11 +5,11 @@ import { vec3ToF32 } from './BaseStack/Math/Vector/vecToF32';
 
 export class Material {
 
-    private diffuse: WebGLTexture;
+    diffuse: WebGLTexture;
     private diffuse_image: HTMLImageElement;
-    private specular: WebGLTexture;
+    specular: WebGLTexture;
     private specular_image: HTMLImageElement;
-    add_color: Vec3 = {x: 0, y: 0, z: 0.7};
+    add_color: Vec3 = {x: 0, y: 0, z: 0.0};
     shininess: number;
 
     constructor(shininess: number) {

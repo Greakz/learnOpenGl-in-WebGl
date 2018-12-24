@@ -6,7 +6,7 @@ import { vec3ToF32 } from './BaseStack/Math/Vector/vecToF32';
 
 export class SpotLight {
 
-    color: Vec3 = {x: 1.0, y: 1.0, z: 1.0};
+    color: Vec3 = {x: 0.0, y: 0.0, z: 0.0};
     position: Vec3 = {x: 2.5, y: 1.5, z: 0};
     direction: Vec3 = {x: -0.25, y: -1, z: 0};
     ambient: Vec3 = {x: 0.15, y: 0.15, z: 0.15};

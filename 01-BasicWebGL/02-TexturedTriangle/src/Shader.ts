@@ -17,7 +17,7 @@ export class Shader {
     };
 
     create() {
-        this.program = ShaderLoader.buildShader('shader');
+        this.program = ShaderLoader.buildShader('Shader');
         const GL: WebGL2RenderingContext = Canvas.getGL();
         this.attribute_locations = {
             vertex_position: GL.getAttribLocation(this.program, 'VertexPosition'),
