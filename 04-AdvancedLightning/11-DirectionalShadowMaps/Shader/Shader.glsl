@@ -89,7 +89,7 @@ float calculateDirectionalShadow() {
             shadow += currentDepth - bias > pcfDepth ? add : 0.0;
         }
     }
-    shadow /= 9.0;
+    shadow /= 11.0;
 
     //float closestDepth = texture(dir_shadow_map, projCoords.xy).r;
     return 1.0 - shadow;
