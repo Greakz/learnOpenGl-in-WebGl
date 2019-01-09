@@ -99,14 +99,14 @@ export class Cube {
 function getRandomMaterial(i: number): Material {
 
     if(i === 0) {
-        // Emerald
+        // Chrome
         return new Material(
-            {x: 0.0215, y: 0.1745, z: 0.0215},
-            {x: 0.07568, y: 0.61424, z: 0.07568},
-            {x: 0.633, y: 0.727811, z: 0.633},
+            {x: 0.25, y: 0.25, z: 0.25},
+            {x: 0.4, y: 0.4, z: 0.4},
+            {x: 0.774597, y: 0.774597, z: 0.774597},
             0.6 * 128,
-            0.9,
-            0.1
+            0.95,
+            0.0
         )
     } else if (i === 1) {
         // Glass
