@@ -66,7 +66,7 @@ void main(void) {
     vec3 diff_light_result = vec3(diff_strength) * mat_diffuse * light_color;
     // specular light
     // vec3 reflect_dir = reflect(-light_dir, surface_normal_unit);
-    float spec_strenght = pow(max(dot(view_dir, reflect_dir), 0.0), mat_shininess); // phong
+    // float spec_strenght = pow(max(dot(view_dir, reflect_dir), 0.0), mat_shininess); // phong
     float spec_strenght = pow(max(dot(surface_normal_unit, halfway_dir), 0.0), mat_shininess); // blinn
     vec3 spec_light_result = mat_specular * vec3(spec_strenght) * light_color;
 
